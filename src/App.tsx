@@ -1,49 +1,92 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
+import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+interface DownloadOptions {
+  url: string;
+  format: 'video' | 'audio';
+  quality: string;
+  subtitles: boolean;
+  outputPath: string;
+}
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
+function App() {
+  const [options, setOptions] = useState<DownloadOptions>({
+    url: '',
+    format: 'video',
+    quality: '1080p',
+    subtitles: false,
+    outputPath: ''
+  });
+  const [status, setStatus] = useState('');
+
+  const handleDownload = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('Downloading...');
+    try {
+      const result = await invoke('start_download', { options });
+      setStatus('Download complete!');
+    } catch (error) {
+      setStatus(`Error: ${error}`);
+    }
+  };
 
   return (
     <main className="container">
-      <h1>Welcome to Tauri + React</h1>
+      <h1>YT-DLP GUI</h1>
+      <form onSubmit={handleDownload} className="download-form">
+        <div className="input-group">
+          <input
+            type="text"
+            placeholder="Enter video URL..."
+            value={options.url}
+            onChange={(e) => setOptions({...options, url: e.target.value})}
+          />
+        </div>
 
-      <div className="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
+        <div className="options-grid">
+          <div className="option-group">
+            <label>Format</label>
+            <select
+              value={options.format}
+              onChange={(e) => setOptions({...options, format: e.target.value as 'video' | 'audio'})}
+            >
+              <option value="video">Video</option>
+              <option value="audio">Audio Only</option>
+            </select>
+          </div>
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
+          <div className="option-group">
+            <label>Quality</label>
+            <select
+              value={options.quality}
+              onChange={(e) => setOptions({...options, quality: e.target.value})}
+            >
+              <option value="1080p">1080p</option>
+              <option value="720p">720p</option>
+              <option value="480p">480p</option>
+              <option value="best">Best</option>
+            </select>
+          </div>
+
+          <div className="option-group">
+            <label>
+              <input
+                type="checkbox"
+                checked={options.subtitles}
+                onChange={(e) => setOptions({...options, subtitles: e.target.checked})}
+              />
+              Download Subtitles
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" className="download-button">
+          Download
+        </button>
+
+        {status && <div className="status-message">{status}</div>}
       </form>
-      <p>{greetMsg}</p>
     </main>
   );
 }
