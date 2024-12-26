@@ -6,6 +6,7 @@ A modern, beautiful graphical interface for yt-dlp built with Tauri and React.
 
 
 
+
 ## ✨ Features
 
 - 🎯 Simple and intuitive interface

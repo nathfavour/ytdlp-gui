@@ -20,14 +20,18 @@ function App() {
   });
   const [status, setStatus] = useState('');
   const [darkMode, setDarkMode] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [processOutput, setProcessOutput] = useState('');
 
   const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('Downloading...');
     try {
       const result = await invoke('start_download', { options });
+      setProcessOutput(JSON.stringify(result));
       setStatus('Download complete!');
     } catch (error) {
+      setProcessOutput(String(error));
       setStatus(`Error: ${error}`);
     }
   };
@@ -109,6 +113,15 @@ function App() {
           Dark Mode
         </label>
       </div>
+
+      <button onClick={() => setShowSidebar(!showSidebar)}>
+        Toggle Logs
+      </button>
+      {showSidebar && (
+        <aside className="sidebar">
+          <pre>{processOutput}</pre>
+        </aside>
+      )}
     </main>
   );
 }
