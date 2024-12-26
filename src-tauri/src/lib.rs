@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
 struct DownloadOptions {
     url: String,
     format: String,
