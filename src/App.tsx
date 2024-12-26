@@ -19,6 +19,7 @@ function App() {
     outputPath: ''
   });
   const [status, setStatus] = useState('');
+  const [darkMode, setDarkMode] = useState(false);
 
   const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +33,7 @@ function App() {
   };
 
   return (
-    <main className="container">
+    <main className={`container ${darkMode ? 'dark' : ''}`}>
       <h1>YT-DLP GUI</h1>
       <form onSubmit={handleDownload} className="download-form">
         <div className="input-group">
@@ -79,6 +80,16 @@ function App() {
               Download Subtitles
             </label>
           </div>
+
+          <div className="option-group">
+            <label>Output Path</label>
+            <input
+              type="text"
+              placeholder="Enter output path..."
+              value={options.outputPath}
+              onChange={(e) => setOptions({...options, outputPath: e.target.value})}
+            />
+          </div>
         </div>
 
         <button type="submit" className="download-button">
@@ -87,6 +98,17 @@ function App() {
 
         {status && <div className="status-message">{status}</div>}
       </form>
+
+      <div className="theme-switcher">
+        <label>
+          <input
+            type="checkbox"
+            checked={darkMode}
+            onChange={(e) => setDarkMode(e.target.checked)}
+          />
+          Dark Mode
+        </label>
+      </div>
     </main>
   );
 }

@@ -40,6 +40,11 @@ async fn start_download(options: DownloadOptions) -> Result<String, String> {
         command.arg("--write-subs");
     }
 
+    // Add output path
+    if !options.output_path.is_empty() {
+        command.arg("-o").arg(&options.output_path);
+    }
+
     let output = command.output().map_err(|e| e.to_string())?;
     
     if output.status.success() {

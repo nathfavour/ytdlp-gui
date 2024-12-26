@@ -132,12 +132,13 @@ button {
   font-weight: 500;
 }
 
-.option-group select {
+.option-group select,
+.option-group input {
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
   background: rgba(255, 255, 255, 0.1);
-  color: inherit;
+  color: #0f0f0f;
 }
 
 .download-button {
@@ -164,6 +165,15 @@ button {
   text-align: center;
 }
 
+.theme-switcher {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.theme-switcher label {
+  font-weight: 500;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: #f6f6f6;
@@ -175,7 +185,8 @@ button {
   }
 
   input,
-  button {
+  button,
+  select {
     color: #ffffff;
     background-color: #0f0f0f98;
   }
