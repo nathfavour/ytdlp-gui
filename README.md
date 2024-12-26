@@ -4,6 +4,8 @@ A modern, beautiful graphical interface for yt-dlp built with Tauri and React.
 
 ![YT-DLP GUI Screenshot](./screenshots/app.png)
 
+
+
 ## ✨ Features
 
 - 🎯 Simple and intuitive interface
